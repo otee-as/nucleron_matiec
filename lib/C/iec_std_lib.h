@@ -588,14 +588,14 @@ static inline LREAL __time_to_real(TIME IN){
 static inline LINT __time_to_int(TIME IN) {return IN.tv_sec;}
 static inline STRING __time_to_string(TIME IN){
     STRING res;
-    div_t days;
+    lldiv_t days;
     /*t#5d14h12m18s3.5ms*/
     res = __INIT_STRING;
-    days = div(IN.tv_sec, SECONDS_PER_DAY);
+    days = lldiv(IN.tv_sec, SECONDS_PER_DAY);
     if(!days.rem && IN.tv_nsec == 0){
         res.len = snprintf((char*)&res.body, STR_MAX_LEN, "T#%dd", days.quot);
     }else{
-        div_t hours = div(days.rem, SECONDS_PER_HOUR);
+        div_t hours = div((int)days.rem, SECONDS_PER_HOUR);
         if(!hours.rem && IN.tv_nsec == 0){
             res.len = snprintf((char*)&res.body, STR_MAX_LEN, "T#%dd%dh", days.quot, hours.quot);
         }else{
